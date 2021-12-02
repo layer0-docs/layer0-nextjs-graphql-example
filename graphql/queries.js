@@ -18,6 +18,7 @@ export const PRODUCTS_BY_CATEGORY = gql`
       name
       picture
       price
+      rating
     }
   }
 `

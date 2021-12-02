@@ -14,7 +14,7 @@ export const typeDefs = gql`
     name: String
     picture: String
     price: String
-    rating: String
+    rating: Float
     reviews: Int
   }
 

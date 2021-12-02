@@ -15,7 +15,7 @@ export default function ProductListingPage({ slug }) {
 
   if (loading) return null
 
-  if (!data.productsOfCategory.length) {
+  if (error || !data.productsOfCategory.length) {
     return <div className="flex flex-col items-center">No products found.</div>
   }
 

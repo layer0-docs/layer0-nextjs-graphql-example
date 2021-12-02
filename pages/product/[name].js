@@ -8,7 +8,7 @@ export default function ProductPage({ slug }) {
 
   if (loading) return null
 
-  if (!data.product) {
+  if (error || !data.product) {
     return <div className="flex flex-col items-center">Product not found.</div>
   }
 
