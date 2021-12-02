@@ -2,6 +2,8 @@ import Head from 'next/head'
 import '@/styles/globals.css'
 import Header from '@/components/Header'
 import { useEffect, useState } from 'react'
+import { ApolloProvider } from '@apollo/client'
+import client from '../lib/apollo-client'
 // import { prefetch } from '@layer0/prefetch/window/prefetch'
 
 function MyApp({ Component, pageProps }) {
@@ -21,15 +23,17 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <>
-      <Head>
-        <link
-          media={mounted}
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
-        />
-      </Head>
-      <Header />
-      <Component {...pageProps} />
+      <ApolloProvider client={client}>
+        <Head>
+          <link
+            media={mounted}
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+          />
+        </Head>
+        <Header />
+        <Component {...pageProps} />
+      </ApolloProvider>
     </>
   )
 }

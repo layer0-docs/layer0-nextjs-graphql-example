@@ -11,5 +11,10 @@ export const resolvers = {
       const { products } = await cms.getCategory(args.name.toLowerCase())
       return products
     },
+
+    product: async (_parent, args) => {
+      const { product } = await cms.getProductById(args.id)
+      return product
+    },
   },
 }

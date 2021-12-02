@@ -9,6 +9,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@apollo/client": "^3.5.5",
     "apollo-server-micro": "^3.5.0",
     "graphql": "^16.0.1",
     "micro": "^9.3.4",

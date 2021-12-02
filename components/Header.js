@@ -2,30 +2,26 @@ import Link from 'next/link'
 import NextImage from 'next/image'
 import { useRouter } from 'next/router'
 // import { Prefetch } from '@layer0/react'
-import { getCategories } from '@/lib/cms'
+import { useQuery } from '@apollo/client'
 import { useEffect, useState } from 'react'
+import { CATEGORIES } from '../graphql/queries'
 
 export default function Header() {
-  const [categories, setCategories] = useState()
+  const { data, loading, error } = useQuery(CATEGORIES)
   const [activeTab, setActiveTab] = useState()
   const router = useRouter()
 
   useEffect(() => {
-    async function fetchCategories() {
-      const { categories: results } = await getCategories()
-
-      setCategories(results)
-    }
-    fetchCategories()
-  }, [])
-
-  useEffect(() => {
     router.events.on('routeChangeComplete', (url) => {
-      if (categories) {
-        setActiveTab(categories.findIndex(({ href }) => href === url))
+      if (data && data.categories) {
+        setActiveTab(data.categories.findIndex(({ href }) => href === url))
       }
     })
-  }, [categories])
+  }, [data])
+
+  if (loading || error) {
+    return null
+  }
 
   return (
     <>
@@ -39,13 +35,13 @@ export default function Header() {
               alt="Layer0 Logo"
               title="Layer0 Logo"
             />
-            <div className="text-center text-gray-700">Next.js Example</div>
+            <div className="text-center text-gray-700">Next.js + GraphQL Example</div>
           </a>
         </Link>
-        {categories && (
+        {
           <div className="flex flex-col items-center w-full border-b-[1px] border-[#eaeaea]">
             <div className={`py-4 w-2/3 md:flex flex flex-row justify-between`}>
-              {categories.map(({ categoryName, href }, i) => {
+              {data.categories.map(({ categoryName, href }, i) => {
                 const prefetchProps = {}
                 if (process.browser) {
                   // prefetch URL needs to include the `name` param otherwise it will be a browser miss
@@ -69,7 +65,7 @@ export default function Header() {
               })}
             </div>
           </div>
-        )}
+        }
       </header>
     </>
   )

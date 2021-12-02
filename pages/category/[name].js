@@ -1,20 +1,30 @@
 import SEO from '@/components/Seo'
-import { getCategory } from '@/lib/cms'
 import ListItem from '@/components/ListItem'
+import { useQuery } from '@apollo/client'
+import { PRODUCTS_BY_CATEGORY } from 'graphql/queries'
 
-export default function ProductListingPage({ products, slug }) {
+export default function ProductListingPage({ slug }) {
   const meta = {
     title: slug,
     description: slug,
     url: `https://layer0-docs-layer0-next-example-default.layer0.link/category/${slug}`,
-    image: `https://layer0-docs-og-image-default.layer0.link/api?title=${slug}&width=1400&height=720`
+    image: `https://layer0-docs-og-image-default.layer0.link/api?title=${slug}&width=1400&height=720`,
   }
+
+  const { data, loading, error } = useQuery(PRODUCTS_BY_CATEGORY, { variables: { name: slug } })
+
+  if (loading) return null
+
+  if (!data.productsOfCategory.length) {
+    return <div className="flex flex-col items-center">No products found.</div>
+  }
+
   return (
     <>
       <SEO {...meta} />
       <div className="flex flex-col items-center">
         <div className="mt-10 grid xs:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {products.map((product) => {
+          {data.productsOfCategory.map((product) => {
             const prefetchProps = {}
             if (process.browser) {
               // prefetch URL needs to include the `name` param otherwise it will be a browser miss
@@ -31,9 +41,7 @@ export default function ProductListingPage({ products, slug }) {
 }
 
 export async function getServerSideProps({ params }) {
-  const { products } = await getCategory(params.name)
-
   return {
-    props: { products, slug: params.name },
+    props: { slug: params.name },
   }
 }

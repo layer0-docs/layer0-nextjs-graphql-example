@@ -1,14 +1,25 @@
 import SEO from '@/components/Seo'
 import Rating from '@/components/Rating'
-import { getProductById } from '@/lib/cms'
+import { useQuery } from '@apollo/client'
+import { PRODUCT } from 'graphql/queries'
 
-export default function ProductPage({ product, slug }) {
+export default function ProductPage({ slug }) {
+  const { data, loading, error } = useQuery(PRODUCT, { variables: { productId: slug } })
+
+  if (loading) return null
+
+  if (!data.product) {
+    return <div className="flex flex-col items-center">Product not found.</div>
+  }
+
+  const { product } = data
   const meta = {
     title: product.name,
     description: product.description,
     url: `https://layer0-docs-layer0-next-example-default.layer0.link/product/${slug}`,
-    image: `https://layer0-docs-og-image-default.layer0.link/api?title=${product.name}&width=1400&height=720`
+    image: `https://layer0-docs-og-image-default.layer0.link/api?title=${product.name}&width=1400&height=720`,
   }
+
   return (
     <>
       <SEO {...meta} />
@@ -34,9 +45,7 @@ export default function ProductPage({ product, slug }) {
   )
 }
 export async function getServerSideProps({ params }) {
-  const { product } = await getProductById(params.name)
-
   return {
-    props: { product, slug: params.name },
+    props: { slug: params.name },
   }
 }
