@@ -9,6 +9,7 @@ export const typeDefs = gql`
   }
 
   type Product {
+    id: String
     description: String
     href: String
     name: String

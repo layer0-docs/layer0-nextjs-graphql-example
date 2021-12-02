@@ -14,6 +14,7 @@ export const resolvers = {
 
     product: async (_parent, args) => {
       const { product } = await cms.getProductById(args.id)
+      product.id = product._id
       return product
     },
   },

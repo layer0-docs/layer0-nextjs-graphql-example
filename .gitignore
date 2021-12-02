@@ -101,4 +101,5 @@ BUILD_ID
 .yalc
 yalc.lock
 
-.vscode
+.vscode# Layer0 generated build directory
+.layer0
