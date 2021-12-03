@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "deploy": "layer0 deploy",
     "format": "prettier '**/*' --write --ignore-unknown"
   },
   "name": "layer0-next-graphql-example",
